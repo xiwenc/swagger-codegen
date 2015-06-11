@@ -41,11 +41,11 @@ public class {{classname}} {
     {{#hasProduces}}produces = { {{#produces}}"{{mediaType}}"{{#hasMore}}, {{/hasMore}}{{/produces}} }, {{/hasProduces}}
     {{#hasConsumes}}consumes = { {{#consumes}}"{{mediaType}}"{{#hasMore}}, {{/hasMore}}{{/consumes}} },{{/hasConsumes}}
     method = RequestMethod.{{httpMethod}})
-  public ResponseEntity<{{returnType}}> {{nickname}}({{#allParams}}{{>queryParams}}{{>pathParams}}{{>headerParams}}{{>bodyParams}}{{>formParams}}{{#hasMore}},
+  public {{#returnContainer}}{{returnContainer}}{{/returnContainer}}{{^returnContainer}}ResponseEntity{{/returnContainer}}<{{returnType}}> {{nickname}}({{#allParams}}{{>queryParams}}{{>pathParams}}{{>headerParams}}{{>bodyParams}}{{>formParams}}{{#hasMore}},
     {{/hasMore}}{{/allParams}})
       throws NotFoundException {
       // do some magic!
-      return new ResponseEntity<{{returnType}}>(HttpStatus.OK);
+      return null;
   }
 
   {{/operation}}
