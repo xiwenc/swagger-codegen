@@ -115,6 +115,8 @@ public class SpringMVCServerCodegen extends JavaClientCodegen implements Codegen
 
     @Override
     public void addOperationToGroup(String tag, String resourcePath, Operation operation, CodegenOperation co, Map<String, List<CodegenOperation>> operations) {
+        Map<String, Object> extensions = operation.getVendorExtensions();
+        String routerControllerKey = "x-swagger-router-controller";
         String basePath = resourcePath;
         if (basePath.startsWith("/")) {
             basePath = basePath.substring(1);
@@ -122,6 +124,9 @@ public class SpringMVCServerCodegen extends JavaClientCodegen implements Codegen
         int pos = basePath.indexOf("/");
         if (pos > 0) {
             basePath = basePath.substring(0, pos);
+        }
+        if (extensions.containsKey(routerControllerKey)) {
+            basePath = ((String)extensions.get(routerControllerKey)).toLowerCase();
         }
 
         if (basePath == "") {
