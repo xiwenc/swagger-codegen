@@ -41,7 +41,7 @@ public class {{classname}} {
     {{#hasProduces}}produces = { {{#produces}}"{{mediaType}}"{{#hasMore}}, {{/hasMore}}{{/produces}} }, {{/hasProduces}}
     {{#hasConsumes}}consumes = { {{#consumes}}"{{mediaType}}"{{#hasMore}}, {{/hasMore}}{{/consumes}} },{{/hasConsumes}}
     method = RequestMethod.{{httpMethod}})
-  public {{#returnContainer}}{{returnContainer}}{{/returnContainer}}{{^returnContainer}}ResponseEntity{{/returnContainer}}<{{returnType}}> {{nickname}}({{#allParams}}{{>queryParams}}{{>pathParams}}{{>headerParams}}{{>bodyParams}}{{>formParams}}{{#hasMore}},
+  public {{#returnContainer}}{{returnContainer}}<{{/returnContainer}}{{returnType}}{{#returnContainer}}>{{/returnContainer}} {{nickname}}({{#allParams}}{{>queryParams}}{{>pathParams}}{{>headerParams}}{{>bodyParams}}{{>formParams}}{{#hasMore}},
     {{/hasMore}}{{/allParams}})
       throws NotFoundException {
       // do some magic!
