@@ -22,29 +22,18 @@ public class SpringMVCServerCodegen extends JavaClientCodegen implements Codegen
     protected String artifactId = "swagger-spring-mvc-server";
     protected String artifactVersion = "1.0.0";
     protected String sourceFolder = "src/main/java";
-    protected String title = "Petstore Server";
+    protected String title = "Generated Server";
 
     protected String configPackage = "";
 
     public SpringMVCServerCodegen() {
-        super.processOpts();
+        super();
+
         outputFolder = "generated-code/javaSpringMVC";
         modelTemplateFiles.put("model.mustache", ".java");
         apiTemplateFiles.put("api.mustache", ".java");
         apiTemplateFiles.put("test.mustache", "Tests.java");
         templateDir = "JavaSpringMVC";
-        apiPackage = "io.swagger.api";
-        modelPackage = "io.swagger.model";
-        configPackage = "io.swagger.configuration";
-
-
-        additionalProperties.put("invokerPackage", invokerPackage);
-        additionalProperties.put("groupId", groupId);
-        additionalProperties.put("artifactId", artifactId);
-        additionalProperties.put("artifactVersion", artifactVersion);
-        additionalProperties.put("title", title);
-        additionalProperties.put("apiPackage", apiPackage);
-        additionalProperties.put("configPackage", configPackage);
 
         languageSpecificPrimitives = new HashSet<String>(
                 Arrays.asList(
@@ -73,6 +62,14 @@ public class SpringMVCServerCodegen extends JavaClientCodegen implements Codegen
     @Override
     public void processOpts() {
         super.processOpts();
+
+        invokerPackage = (String)additionalProperties.get("invokerPackage");
+        apiPackage = String.format("%s.api", invokerPackage);
+        modelPackage = String.format("%s.model", invokerPackage);
+        configPackage = String.format("%s.configuration", invokerPackage);
+        additionalProperties.put("title", title);
+        additionalProperties.put("apiPackage", apiPackage);
+        additionalProperties.put("configPackage", configPackage);
 
         supportingFiles.clear();
         supportingFiles.add(new SupportingFile("pom.mustache", "", "pom.xml"));
