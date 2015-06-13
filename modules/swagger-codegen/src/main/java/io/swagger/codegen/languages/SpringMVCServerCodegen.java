@@ -31,6 +31,7 @@ public class SpringMVCServerCodegen extends JavaClientCodegen implements Codegen
         outputFolder = "generated-code/javaSpringMVC";
         modelTemplateFiles.put("model.mustache", ".java");
         apiTemplateFiles.put("api.mustache", ".java");
+        apiTemplateFiles.put("test.mustache", "Tests.java");
         templateDir = "JavaSpringMVC";
         apiPackage = "io.swagger.api";
         modelPackage = "io.swagger.model";
