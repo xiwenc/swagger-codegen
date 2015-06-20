@@ -9,7 +9,7 @@ public interface {{classname}}Tests {
     * @ApiResponses(value = { {{#responses}}
         *     @ApiResponse(code = {{{code}}}, message = "{{{message}}}"){{#hasMore}},{{/hasMore}}{{/responses}} })
     **/
-    public void {{nickname}}();
+    public void {{nickname}}() throws Exception;
 
 {{/operation}}
 }
