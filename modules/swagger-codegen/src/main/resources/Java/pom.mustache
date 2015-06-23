@@ -148,6 +148,13 @@
       <version>${jodatime-version}</version>
     </dependency>
 
+    <!-- custom dependencies -->
+    <dependency>
+      <groupId>com.mendix.cloud</groupId>
+      <artifactId>urlsign</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+
     <!-- test dependencies -->
     <dependency>
       <groupId>junit</groupId>
@@ -156,6 +163,14 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <repositories>
+    <repository>
+      <id>cloud-snapshot-local</id>
+      <url>http://kate.rnd.hq.mendix.net/artifactory/cloud-snapshot-local</url>
+    </repository>
+  </repositories>
+
   <properties>
     <swagger-annotations-version>1.5.0</swagger-annotations-version>
     <jersey-version>1.18</jersey-version>
