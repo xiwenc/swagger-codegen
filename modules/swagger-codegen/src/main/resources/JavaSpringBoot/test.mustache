@@ -1,0 +1,16 @@
+package {{apiPackage}};
+
+{{#operations}}
+public interface {{classname}}Tests {
+/* @Api(value = "/{{baseName}}", description = "The {{baseName}} API") */
+{{#operation}}
+    /**
+    * @ApiOperation(value = "{{{summary}}}", notes = "{{{notes}}}", response = {{{returnType}}}.class{{#returnContainer}}, responseContainer = "{{{returnContainer}}}"{{/returnContainer}})
+    * @ApiResponses(value = { {{#responses}}
+        *     @ApiResponse(code = {{{code}}}, message = "{{{message}}}"){{#hasMore}},{{/hasMore}}{{/responses}} })
+    **/
+    public void {{nickname}}() throws Exception;
+
+{{/operation}}
+}
+{{/operations}}

@@ -1,0 +1,10 @@
+package {{apiPackage}};
+
+{{#operations}}
+public interface {{classname}}Tests {
+  {{#operation}}
+  public void {{nickname}}();
+
+  {{/operation}}
+}
+{{/operations}}

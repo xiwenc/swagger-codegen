@@ -5,17 +5,21 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import com.mendix.cloud.urlsign.URLSign;
+import com.mendix.cloud.urlsign.exception.URLSignerException;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.client.filter.LoggingFilter;
+import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.WebResource.Builder;
 import com.sun.jersey.multipart.FormDataMultiPart;
 
 import javax.ws.rs.core.Response.Status.Family;
 import javax.ws.rs.core.MediaType;
 
+import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -39,11 +43,13 @@ import {{invokerPackage}}.auth.HttpBasicAuth;
 import {{invokerPackage}}.auth.ApiKeyAuth;
 import {{invokerPackage}}.auth.OAuth;
 
+
 public class ApiClient {
   private Map<String, Client> hostMap = new HashMap<String, Client>();
   private Map<String, String> defaultHeaderMap = new HashMap<String, String>();
   private boolean debugging = false;
   private String basePath = "{{basePath}}";
+  private String privatekey = null;
 
   private Map<String, Authentication> authentications;
 
@@ -76,6 +82,14 @@ public class ApiClient {
   public ApiClient setBasePath(String basePath) {
     this.basePath = basePath;
     return this;
+  }
+
+  public String getPrivatekey() {
+    return privatekey;
+  }
+
+  public void setPrivatekey(String privateKey) {
+    this.privatekey = privateKey;
   }
 
   /**
@@ -359,11 +373,19 @@ public class ApiClient {
     }
     String querystring = b.toString();
 
+    URI resourceUri = URI.create(basePath + path + querystring);
+    try {
+      resourceUri = URLSign.sign(getPrivatekey(), resourceUri, URLSign.DEFAULT_EXPIRE_TTL);
+    } catch (Exception e) {
+      throw new ApiException(500, "URL Signature error: " + e.getMessage());
+    }
+    WebResource resource = client.resource(resourceUri);
+
     Builder builder;
     if (accept == null)
-      builder = client.resource(basePath + path + querystring).getRequestBuilder();
+      builder = resource.getRequestBuilder();
     else
-      builder = client.resource(basePath + path + querystring).accept(accept);
+      builder = resource.accept(accept);
 
     for(String key : headerParams.keySet()) {
       builder = builder.header(key, headerParams.get(key));

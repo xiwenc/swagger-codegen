@@ -9,31 +9,26 @@ import io.swagger.models.properties.ArrayProperty;
 import io.swagger.models.properties.MapProperty;
 import io.swagger.models.properties.Property;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class SpringMVCServerCodegen extends JavaClientCodegen implements CodegenConfig {
+public class SpringBootSpecCodegen extends JavaClientCodegen implements CodegenConfig {
     protected String invokerPackage = "io.swagger.api";
     protected String groupId = "io.swagger";
-    protected String artifactId = "swagger-spring-mvc-server";
+    protected String artifactId = "swagger-spring-boot-spec";
     protected String artifactVersion = "1.0.0";
     protected String sourceFolder = "src/main/java";
-    protected String title = "Generated Server";
+    protected String title = "Generated Server Spec";
 
     protected String configPackage = "";
 
-    public SpringMVCServerCodegen() {
+    public SpringBootSpecCodegen() {
         super();
 
-        outputFolder = "generated-code/javaSpringMVC";
+        outputFolder = "generated-code/javaSpringBoot";
         modelTemplateFiles.put("model.mustache", ".java");
         apiTemplateFiles.put("api.mustache", ".java");
         apiTemplateFiles.put("test.mustache", "Tests.java");
-        templateDir = "JavaSpringMVC";
+        templateDir = "JavaSpringBoot";
 
         languageSpecificPrimitives = new HashSet<String>(
                 Arrays.asList(
@@ -52,11 +47,11 @@ public class SpringMVCServerCodegen extends JavaClientCodegen implements Codegen
     }
 
     public String getName() {
-        return "spring-mvc";
+        return "spring-boot";
     }
 
     public String getHelp() {
-        return "Generates a Java Spring-MVC Server application using the SpringFox integration.";
+        return "Generates a Java Spring-boot application specification.";
     }
 
     @Override
@@ -72,28 +67,7 @@ public class SpringMVCServerCodegen extends JavaClientCodegen implements Codegen
         additionalProperties.put("configPackage", configPackage);
 
         supportingFiles.clear();
-        supportingFiles.add(new SupportingFile("pom.mustache", "", "pom.xml"));
-        supportingFiles.add(new SupportingFile("README.mustache", "", "README.md"));
-        supportingFiles.add(new SupportingFile("apiException.mustache",
-                (sourceFolder + File.separator + apiPackage).replace(".", java.io.File.separator), "ApiException.java"));
-        supportingFiles.add(new SupportingFile("apiOriginFilter.mustache",
-                (sourceFolder + File.separator + apiPackage).replace(".", java.io.File.separator), "ApiOriginFilter.java"));
-        supportingFiles.add(new SupportingFile("apiResponseMessage.mustache",
-                (sourceFolder + File.separator + apiPackage).replace(".", java.io.File.separator), "ApiResponseMessage.java"));
-        supportingFiles.add(new SupportingFile("notFoundException.mustache",
-                (sourceFolder + File.separator + apiPackage).replace(".", java.io.File.separator), "NotFoundException.java"));
-
-        supportingFiles.add(new SupportingFile("swaggerConfig.mustache",
-                (sourceFolder + File.separator + configPackage).replace(".", java.io.File.separator), "SwaggerConfig.java"));
-        supportingFiles.add(new SupportingFile("webApplication.mustache",
-                (sourceFolder + File.separator + configPackage).replace(".", java.io.File.separator), "WebApplication.java"));
-        supportingFiles.add(new SupportingFile("webMvcConfiguration.mustache",
-                (sourceFolder + File.separator + configPackage).replace(".", java.io.File.separator), "WebMvcConfiguration.java"));
-        supportingFiles.add(new SupportingFile("swaggerUiConfiguration.mustache",
-                (sourceFolder + File.separator + configPackage).replace(".", java.io.File.separator), "SwaggerUiConfiguration.java"));
-        supportingFiles.add(new SupportingFile("swagger.properties",
-                ("src.main.resources").replace(".", java.io.File.separator), "swagger.properties"));
-
+        supportingFiles.add(new SupportingFile("pom.mustache", "", "pom-swagger.xml"));
     }
 
     @Override
