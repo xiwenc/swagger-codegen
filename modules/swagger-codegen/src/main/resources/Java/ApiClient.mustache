@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import com.mendix.cloud.urlsign.URLSigner;
+import com.mendix.cloud.urlsign.URLSign;
 import com.mendix.cloud.urlsign.exception.URLSignerException;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -43,13 +43,13 @@ import {{invokerPackage}}.auth.HttpBasicAuth;
 import {{invokerPackage}}.auth.ApiKeyAuth;
 import {{invokerPackage}}.auth.OAuth;
 
-import {{invokerPackage}}.UrlSignerSingleton;
 
 public class ApiClient {
   private Map<String, Client> hostMap = new HashMap<String, Client>();
   private Map<String, String> defaultHeaderMap = new HashMap<String, String>();
   private boolean debugging = false;
   private String basePath = "{{basePath}}";
+  private String privatekey = null;
 
   private Map<String, Authentication> authentications;
 
@@ -82,6 +82,14 @@ public class ApiClient {
   public ApiClient setBasePath(String basePath) {
     this.basePath = basePath;
     return this;
+  }
+
+  public String getPrivatekey() {
+    return privatekey;
+  }
+
+  public void setPrivatekey(String privateKey) {
+    this.privatekey = privateKey;
   }
 
   /**
@@ -366,10 +374,9 @@ public class ApiClient {
     String querystring = b.toString();
 
     URI resourceUri = URI.create(basePath + path + querystring);
-    URLSigner urlSigner = UrlSignerSingleton.getInstance();
     try {
-      resourceUri = urlSigner.sign(resourceUri, UrlSignerSingleton.DEFAULT_EXPIRE_TTL);
-    } catch (URLSignerException e) {
+      resourceUri = URLSign.sign(getPrivatekey(), resourceUri, URLSign.DEFAULT_EXPIRE_TTL);
+    } catch (Exception e) {
       throw new ApiException(500, "URL Signature error: " + e.getMessage());
     }
     WebResource resource = client.resource(resourceUri);
