@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import com.mendix.cloud.urlsign.exception.URLSignException;
 import com.mendix.cloud.urlsign.URLSign;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -354,7 +355,7 @@ public class ApiClient {
    * @param authNames The authentications to apply
    * @return The response body in type of string
    */
-  public String invokeAPI(String path, String method, Map<String, String> queryParams, Object body, Map<String, String> headerParams, Map<String, String> formParams, String accept, String contentType, String[] authNames) throws ApiException {
+  public String invokeAPI(String path, String method, Map<String, String> queryParams, Object body, Map<String, String> headerParams, Map<String, String> formParams, String accept, String contentType, String[] authNames) throws ApiException, URLSignException {
     updateParamsForAuth(authNames, queryParams, headerParams);
 
     Client client = getClient();
@@ -373,11 +374,7 @@ public class ApiClient {
     String querystring = b.toString();
 
     URI resourceUri = URI.create(basePath + path + querystring);
-    try {
-      resourceUri = URLSign.sign(getPrivatekey(), resourceUri, URLSign.DEFAULT_EXPIRE_TTL);
-    } catch (Exception e) {
-      throw new ApiException(500, "URL Signature error: " + e.getMessage());
-    }
+    resourceUri = URLSign.sign(getPrivatekey(), resourceUri, URLSign.DEFAULT_EXPIRE_TTL);
     WebResource resource = client.resource(resourceUri);
 
     Builder builder;
