@@ -518,7 +518,9 @@ public class ApiClient {
    */
   private Client getClient() {
     if(!hostMap.containsKey(basePath)) {
-      Client client = Client.create();
+      final ClientConfig config = new DefaultClientConfig();
+      config.getProperties().put(ClientConfig.PROPERTY_CHUNKED_ENCODING_SIZE, -1 /* default chunk size */);
+      Client client = Client.create(config);
       if (debugging)
         client.addFilter(new LoggingFilter());
       hostMap.put(basePath, client);
