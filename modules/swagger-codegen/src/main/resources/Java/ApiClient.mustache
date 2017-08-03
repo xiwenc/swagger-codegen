@@ -49,6 +49,7 @@ public class ApiClient {
   private boolean debugging = false;
   private String basePath = "{{basePath}}";
   private String privatekey = null;
+  private int urlSignTtl = URLSign.DEFAULT_EXPIRE_TTL;
 
   private Map<String, Authentication> authentications;
 
@@ -89,6 +90,14 @@ public class ApiClient {
 
   public void setPrivatekey(String privateKey) {
     this.privatekey = privateKey;
+  }
+
+  public int getUrlSignTtl() {
+    return this.urlSignTtl;
+  }
+
+  public void setUrlSignTtl(final int urlSignTtl) {
+    this.urlSignTtl = urlSignTtl;
   }
 
   /**
@@ -374,7 +383,7 @@ public class ApiClient {
 
     URI resourceUri = URI.create(basePath + path + querystring);
     try {
-      resourceUri = URLSign.sign(getPrivatekey(), resourceUri, URLSign.DEFAULT_EXPIRE_TTL);
+      resourceUri = URLSign.sign(getPrivatekey(), resourceUri, getUrlSignTtl());
     } catch (Exception e) {
       throw new ApiException(500, "URL Signature error: " + e.getMessage());
     }
